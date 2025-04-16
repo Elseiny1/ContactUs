@@ -4,9 +4,6 @@ namespace Feedbacks.ViewModels
 {
     public class RegisterAccount
     {
-        [Key]
-        public int Id { get; set; }
-
         [Required]
         [StringLength(100, ErrorMessage = "Full name must be at least {2} characters long.", MinimumLength = 2)]
         [RegularExpression(@"^[a-zA-Z\s]+$", ErrorMessage = "Full name can only contain letters and spaces.")]

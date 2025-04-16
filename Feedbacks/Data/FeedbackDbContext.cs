@@ -1,4 +1,5 @@
 ﻿using Feedbacks.Entities;
+using Feedbacks.Entities.Forms;
 
 namespace Feedbacks.Data
 {
@@ -9,5 +10,6 @@ namespace Feedbacks.Data
         }
         public DbSet<UserAccount> UserAccounts { get; set; }
 
+        public DbSet<Service> Services { get; set; }
     }
 }

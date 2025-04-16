@@ -13,6 +13,8 @@ namespace Feedbacks.Entities.Forms
             ErrorMessage = "Service name must be in range 2 to 500 charachtars")]
         public string ServiceName { get; set; }
 
+        public bool IsDeleted { get; set; } = false;
+
         #region Relationships
         public ICollection<Question> Questions { get; set; }
 

@@ -1,5 +1,4 @@
 using System.Diagnostics;
-using Feedbacks.Models;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Feedbacks.Controllers

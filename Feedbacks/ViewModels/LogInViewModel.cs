@@ -2,7 +2,7 @@
 
 namespace Feedbacks.ViewModels
 {
-    public class LogInViewModel
+    public class LoginViewModel
     {
         [Required(ErrorMessage = "Email is required.")]
         [EmailAddress(ErrorMessage = "Invalid email address format.")]

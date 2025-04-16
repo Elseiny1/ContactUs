@@ -4,11 +4,6 @@ namespace Feedbacks.ViewModels
 {
     public class RegisterAccount
     {
-        [Required]
-        [StringLength(100, ErrorMessage = "Full name must be at least {2} characters long.", MinimumLength = 2)]
-        [RegularExpression(@"^[a-zA-Z\s]+$", ErrorMessage = "Full name can only contain letters and spaces.")]
-        public string FullName { get; set; }
-
         [Required(ErrorMessage = "Email is required.")]
         [EmailAddress(ErrorMessage = "Invalid email address format.")]
         [RegularExpression(@"^([\w-\.]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([\w-]+\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)$",

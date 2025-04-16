@@ -5,12 +5,12 @@ namespace Feedbacks.Repos.ServiceManagement
 {
     public interface IServiceRepo
     {
-        Task<Service> Add(ServiceViewModel service);
-        Task<ServiceViewModel> Update(ServiceViewModel service);
-        Task<string> Delete(string id);
+        Task<Service> AddServiceAsync(ServiceViewModel service);
+        Task<ServiceViewModel> UpdateServiceAsync(ServiceViewModel service);
+        Task<string> DeleteServiceAsync(string id);
         Task<IEnumerable<Service>> GetAllServicesAsync();
-        Task<Service> GetServiceById(string id);
-        Task<Service> GetServiceByName(string name);
+        Task<Service> GetServiceByIdAsync(string id);
+        Task<Service> GetServiceByNameAsync(string name);
 
     }
 }

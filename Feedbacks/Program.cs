@@ -1,3 +1,5 @@
+using Feedbacks.Repos;
+using Feedbacks.Repos.ServiceManagement;
 using Microsoft.AspNetCore.Identity;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -12,6 +14,11 @@ builder.Services.AddDbContext<FeedbackDbContext>(options =>
 
 builder.Services.AddIdentity<AdminIdentity, IdentityRole>()
     .AddEntityFrameworkStores<FeedbackDbContext>();
+
+#endregion
+
+#region Repository instances
+builder.Services.AddScoped<IServiceRepo, ServiceRepo>();
 
 #endregion
 

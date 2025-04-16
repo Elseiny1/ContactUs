@@ -1,8 +1,17 @@
-﻿@{
-    ViewData["Title"] = "Home Page";
-}
+﻿@model Feedbacks.ViewModels.Services.ServiceViewModel;
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-</div>
+<html>
+    <head>
+        <title>Home Page</title>
+    </head>
+    <body>
+    
+        <form asp-action="Index" method="post">
+        <div>
+            <label asp-for=@Model.ServiceName></label>
+            <input asp-for=@Model.ServiceName />
+        </div>
+        <button type="submit">Submit</button>
+        </form>
+    </body>
+</html>

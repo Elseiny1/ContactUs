@@ -8,6 +8,8 @@
             _context = context;
         }
 
-        //Add Update Delete GetAll GetById
+        //Add Update Delete GetAll GetById GetbyServiceId 
+
+
     }
 }

@@ -18,7 +18,7 @@ namespace Feedbacks.Entities.Forms
         [Required(ErrorMessage = "Question type is requird.")]
         [Range(1, 3, ErrorMessage = "Question type must be in range 1 to 3.")]
         public int QuestionType { get; set; } // Types from 1 to 3.
-
+        public bool IsDeleted { get; set; } = false;
 
         #region Relationships
         [ForeignKey("ServiceId")]

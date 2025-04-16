@@ -13,13 +13,15 @@ namespace Feedbacks.Repos
         }
 
         //While the return is null there's somthing wrong
-        public async Task<Service> Add(ServiceViewModel service)
+        public async Task<Service> AddServiceAsync(ServiceViewModel service)
         {
             if (service is null)
                 return null;
 
             var newService = new Service();
             newService.ServiceName = service.ServiceName;
+            newService.Id = Guid.NewGuid().ToString();
+            newService.IsDeleted = false;
 
             try
             {
@@ -37,7 +39,7 @@ namespace Feedbacks.Repos
 
         }
 
-        public async Task<ServiceViewModel> Update(ServiceViewModel service)
+        public async Task<ServiceViewModel> UpdateServiceAsync(ServiceViewModel service)
         {
             if (service is null)
             {
@@ -72,7 +74,7 @@ namespace Feedbacks.Repos
             }
         }
 
-        public async Task<string> Delete(string id)
+        public async Task<string> DeleteServiceAsync(string id)
         {
             var existingService = await _context.Services.FindAsync(id);
             if (existingService == null || existingService.IsDeleted)
@@ -100,7 +102,7 @@ namespace Feedbacks.Repos
             return services;
         }
 
-        public async Task<Service> GetServiceById(string id)
+        public async Task<Service> GetServiceByIdAsync(string id)
         {
             var service = await _context.Services
                 .Where(s => s.Id == id && !s.IsDeleted)
@@ -111,7 +113,7 @@ namespace Feedbacks.Repos
             return service;
         }
 
-        public async Task<Service> GetServiceByName(string name)
+        public async Task<Service> GetServiceByNameAsync(string name)
         {
             var service = await _context.Services
                 .Where(s => s.ServiceName == name && !s.IsDeleted)

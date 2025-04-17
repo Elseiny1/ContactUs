@@ -5,10 +5,10 @@ namespace Feedbacks.Repos.QuestionManagement
 {
     public interface IQuestionRepo
     {
-        public Task<QuestionViewModel> AddQuestionAsync(QuestionViewModel questionViewModel);
         public Task<QuestionViewModel> UpdateQuestionASync(QuestionViewModel questionViewModel);
         public Task<string> DeleteQuestionASync(string id);
 
+        public Task<IEnumerable<QuestionViewModel>> AddQuestionsAsync(IEnumerable<QuestionViewModel> questionViewModels);
 
         public Task<List<Question>> GetAllQuestionsAsync(string serviceId);
         public Task<Question> GetQuestionByIdAsync(string id);

@@ -15,41 +15,76 @@ namespace Feedbacks.Repos.QuestionManagement
         }
 
         #region Write Questions
-        public async Task<QuestionViewModel> AddQuestionAsync(QuestionViewModel questionViewModel)
-        {
-            var question = new Question
-            {
-                Id = Guid.NewGuid().ToString(),
-                QuestionText = questionViewModel.QuestionText,
-                QuestionType = questionViewModel.QuestionType,
-                IsDeleted = false,
-            };
 
+
+        public async Task<IEnumerable<QuestionViewModel>> AddQuestionsAsync(IEnumerable<QuestionViewModel> questionViewModels)
+        {
+            if(questionViewModels == null)
+            {
+                return null;
+            }
+
+            var questionViewModelsList = new List<QuestionViewModel>();
+            foreach (var questionViewModel in questionViewModels)
+            {
+                var question = await AddQuestionAsync(questionViewModel);
+                if (question == null)
+                {
+                    return null;
+                }
+            }
             try
             {
-                _context.Questions.Add(question);
                 await _context.SaveChangesAsync();
-
+                return questionViewModelsList;
             }
             catch (Exception ex)
             {
-                questionViewModel.Massage = ex.Message;
-                return questionViewModel;
+                return null;
             }
-            return questionViewModel;
-
         }
 
         public async Task<QuestionViewModel> UpdateQuestionASync(QuestionViewModel questionViewModel)
         {
+            if (questionViewModel == null)
+            {
+                questionViewModel.Massage = "Question not selected";
+                return questionViewModel;
+            }
             var question = await _context.Questions.FindAsync(questionViewModel.Id);
             if (question is null)
             {
                 questionViewModel.Massage = "Question not found";
                 return questionViewModel;
             }
+
             question.QuestionText = questionViewModel.QuestionText;
             question.QuestionType = questionViewModel.QuestionType;
+
+            if(await IsMultibleChoices(question.QuestionType))
+            {
+                question.Choices = _context.Choices
+                    .Where(x => x.QuestionId == questionViewModel.Id)
+                    .Select(c => new Choice()).ToList();
+                foreach (var choice in questionViewModel.Choices)
+                {
+                    var newChoice = new Choice
+                    {
+                        Text = choice.Text,
+                        QuestionId = question.Id,
+                    };
+                    try
+                    {
+                        question.Choices.Add(newChoice);
+                    }
+                    catch (NotSupportedException ex)
+                    {
+                        questionViewModel.Massage = ex.Message;
+                        return questionViewModel;
+                    }
+                }
+            }
+
             try
             {
                 _context.Questions.Update(question);
@@ -146,5 +181,66 @@ namespace Feedbacks.Repos.QuestionManagement
             }
         }
         #endregion
+
+
+        private async Task<QuestionViewModel> AddQuestionAsync(QuestionViewModel questionViewModel)
+        {
+            var question = new Question
+            {
+                Id = Guid.NewGuid().ToString(),
+                QuestionText = questionViewModel.QuestionText,
+                QuestionType = questionViewModel.QuestionType,
+                ServiceId = questionViewModel.ServiceId,
+                IsDeleted = false,
+            };
+            var isMultipleChoices = await IsMultibleChoices(question.QuestionType);
+            if(isMultipleChoices)
+            {
+                question.Choices = new List<Choice>();
+                foreach (var choice in questionViewModel.Choices)
+                {
+                    var newChoice = new Choice
+                    {
+                        Text = choice.Text,
+                        QuestionId = question.Id,
+                    };
+                    try
+                    {
+                        question.Choices.Add(newChoice);
+
+                    }
+                    catch (NotSupportedException ex)
+                    {
+                        questionViewModel.Massage = ex.Message;
+                        return questionViewModel;
+                    }
+                }
+            }
+            else
+            {
+                question.Choices = null;
+            }
+
+            try
+            {
+                _context.Questions.Add(question);
+            }
+            catch (Exception ex)
+            {
+                questionViewModel.Massage = ex.Message;
+                return questionViewModel;
+            }
+            return questionViewModel;
+
+        }
+        private async Task<bool> IsMultibleChoices(int questionType)
+        {
+            if (questionType == 3)
+            {
+                return true;
+            }
+            return false;
+        }
+        
     }
 }

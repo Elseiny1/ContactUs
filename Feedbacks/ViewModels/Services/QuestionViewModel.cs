@@ -18,6 +18,9 @@ namespace Feedbacks.ViewModels.Services
         public int QuestionType { get; set; } // Types from 1 to 3.
         public bool IsDeleted { get; set; } = false;
 
+        public string ServiceId { get; set; }
         public string? Massage { get; set; }
+
+        public List<ChoiceViewModel>? Choices { get; set; }
     }
 }

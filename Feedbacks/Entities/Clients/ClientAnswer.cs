@@ -13,7 +13,7 @@ namespace Feedbacks.Entities.Clients
 
         [StringLength(500,MinimumLength = 2, 
             ErrorMessage = "Text must in range 2 to 500 charachtars")]
-        public string? AnswerText { get; set; }
+        public string? AnswerText { get; set; }//this field will contain the text and the true or false ansers
 
         [Range(1,20, ErrorMessage = "Choice Id must be in range of 1 to 20.")]
         public int? ChoiceId { get; set; }

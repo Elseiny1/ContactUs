@@ -30,7 +30,7 @@ namespace Feedbacks.Controllers
         {
             if(!ModelState.IsValid)
             {
-                return View(ModelState.Values.ToString());
+                return View(model);
             }
             var result = await _serviceRepo.AddServiceAsync(model);
             if(result is null)

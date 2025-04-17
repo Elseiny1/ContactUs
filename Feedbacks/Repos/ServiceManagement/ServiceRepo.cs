@@ -4,7 +4,7 @@ using Feedbacks.ViewModels.Services;
 
 namespace Feedbacks.Repos
 {
-    public class ServiceRepo : IServiceRepo
+    public class ServiceRepo : IServiceRepo, IValidateServiceId
     {
         private readonly FeedbackDbContext _context;
         public ServiceRepo(FeedbackDbContext context)

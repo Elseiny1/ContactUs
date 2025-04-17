@@ -14,5 +14,7 @@ namespace Feedbacks.ViewModels
         [StringLength(200, ErrorMessage = "Password must be at least {6} characters long.", MinimumLength = 6)]
         [DataType(DataType.Password)]
         public string Password { get; set; }
+
+        public string? Masssage { get; set; }
     }
 }

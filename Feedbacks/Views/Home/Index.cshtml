@@ -1,12 +1,25 @@
 ﻿@model Feedbacks.ViewModels.Services.ServiceViewModel;
 
 <html>
-    <head>
-        <title>Home Page</title>
-    </head>
-    <body>
-    
-        <form asp-action="Index" method="post">
+<head>
+    <title>Home Page</title>
+</head>
+<body>
+
+    <form asp-action="Index" method="post">
+        <div>
+            @if(Model != null && Model.Massage != null)
+            {
+                 <h4>@Model.Massage</h4>
+            }
+            @foreach (var error in ViewData.ModelState.Values)
+            {
+                foreach (var errorMessage in error.Errors)
+                {
+                    <div>@errorMessage.ErrorMessage</div>
+                }
+            }
+        </div>
         <div>
             <label asp-for=@Model.ServiceName></label>
             <input asp-for=@Model.ServiceName />

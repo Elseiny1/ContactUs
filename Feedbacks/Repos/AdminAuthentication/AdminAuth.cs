@@ -18,21 +18,33 @@ namespace Feedbacks.Repos.AdminRegister
             _signInManager = signInManager;
         }
 
-        public async Task<string> AdminRegisterAsync(RegisterAccount register)
+        public async Task<RegisterAccount> AdminRegisterAsync(RegisterAccount register)
         {
-            if(register is null)
-                return "Register model is null.";
+            if(register is null || register.Email is null)
+            {
+                register.massage = "Register model is null.";
+                return register;
+            }
 
             var anyExistingUser = await _context.Users.AnyAsync();
             if(anyExistingUser)
-                return "Admin already exists.";
+            {
+                    register.massage = "Admin already exists.";
+                    return register;
+            }
 
             if (register.Password != register.ConfirmPassword)
-                return "Password and Confirm Password do not match.";
+            {
+                register.massage = "Password and Confirm Password do not match.";
+                return register;
+            }
 
             var existingUser = await _userManager.FindByEmailAsync(register.Email);
             if (existingUser != null)
-                return "Invalid Attempt";//to protect the admin email
+            {
+                register.massage = "Admin already exists.";
+                return register;
+            }
 
             try
             {
@@ -44,8 +56,8 @@ namespace Feedbacks.Repos.AdminRegister
                 if (!result.Succeeded)
                 {
                     await _userManager.DeleteAsync(user);
-                    var errors = result.Errors.Select(e => e.Description).ToList();
-                    return string.Join(", ", errors);
+                    register.massage = result.Errors.Select(e => e.Description).ToString();
+                    return register;
                 }
                 await _userManager.AddToRoleAsync(user, "Admin");
 
@@ -53,17 +65,19 @@ namespace Feedbacks.Repos.AdminRegister
                 if (!activateResult)
                 {
                     await _userManager.DeleteAsync(user);
-                    return "Failed to activate account.";
+                    register.massage = "Failed to activate account.";
+                    return register;
                 }
 
                 await _signInManager.SignInAsync(user, isPersistent: true);
-
-                return "Admin registered Successfully.";
+                register.massage = "Admin registered successfully.";
+                return register;
 
             }
             catch (Exception ex)
             {
-                return $"An error occurred: {ex.Message}";
+                register.massage = $"An error occurred: {ex.Message}";
+                return register;
             }
         }
         private async Task<bool> ActivateAccountAsync(string email)
@@ -84,30 +98,38 @@ namespace Feedbacks.Repos.AdminRegister
             }
         }
 
-        public async Task<string> AdminLoginAsync(LoginViewModel login)
+        public async Task<LoginViewModel> AdminLoginAsync(LoginViewModel login)
         {
             if (login is null)
-                return "Login model is null.";
+            {
+                login.Masssage = "Login model is null.";
+                return login;
+            }
             try
             {
                 var user = await _userManager.FindByEmailAsync(login.Email);
                 if (user == null)
-                    return "User not found.";
-
+                {
+                    login.Masssage = "User not found.";
+                    return login;
+                }
                 var result = await _signInManager.PasswordSignInAsync(user, login.Password, isPersistent: false, lockoutOnFailure: false);
                 if (result.Succeeded)
                 {
                     await _signInManager.SignInAsync(user, isPersistent: true);
-                    return "Admin logged in successfully.";
+                    login.Masssage = "Admin logged in successfully.";
+                    return login;
                 }
                 else
                 {
-                    return "Invalid login attempt.";
+                    login.Masssage = "Invalid login attempt.";
+                    return login;
                 }
             }
             catch (Exception ex)
             {
-                return $"An error occurred: {ex.Message}";
+                login.Masssage = $"An error occurred: {ex.Message}";
+                return login;
             }
         }
     }

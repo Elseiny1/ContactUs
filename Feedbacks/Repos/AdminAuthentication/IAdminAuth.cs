@@ -2,7 +2,7 @@
 {
     public interface IAdminAuth
     {
-        public Task<string> AdminRegisterAsync(RegisterAccount register);
-        public Task<string> AdminLoginAsync(LoginViewModel login);
+        public Task<RegisterAccount> AdminRegisterAsync(RegisterAccount register);
+        public Task<LoginViewModel> AdminLoginAsync(LoginViewModel login);
     }
 }
